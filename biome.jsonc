@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/core", "ultracite/react"],
+  "javascript": {
+    "globals": ["chrome", "defineContentScript", "defineBackground", "GPU"]
+  },
+  "files": {
+    "includes": ["src/**/*", "!src/data/**/*", "!public/**/*"]
+  }
+}

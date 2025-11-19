@@ -1,0 +1,33 @@
+{
+  "$schema": "https://unpkg.com/release-it@19/schema/release-it.json",
+  "git": {
+    "commitMessage": "chore: release v${version}",
+    "tagName": "v${version}",
+    "requireCleanWorkingDir": true,
+    "requireUpstream": false
+  },
+  "github": {
+    "release": true,
+    "assets": [".output/*.zip"],
+    "releaseName": "v${version}"
+  },
+  "npm": {
+    "publish": false
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": {
+        "name": "angular"
+      },
+      "infile": "CHANGELOG.md"
+    }
+  },
+  "hooks": {
+    "before:init": [
+      "bun run type-check",
+      "bun run check",
+      "test -f src/data/trigger-embeddings.json || (echo '❌ Embeddings file missing! Run: bun run generate:embeddings' && exit 1)"
+    ],
+    "after:bump": ["bun run build", "bun run zip"]
+  }
+}

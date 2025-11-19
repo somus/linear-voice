@@ -1,0 +1,13 @@
+{
+  "extends": "./.wxt/tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "types": ["@types/chrome"],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "strictNullChecks": true,
+    "resolveJsonModule": true
+  }
+}

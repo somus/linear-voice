@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Build and Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for changelog generation
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Verify package.json version matches tag
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION=${{ steps.version.outputs.VERSION }}
+          if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
+            echo "Error: package.json version ($PACKAGE_VERSION) doesn't match tag version ($TAG_VERSION)"
+            exit 1
+          fi
+          echo "✅ Version verified: $PACKAGE_VERSION"
+
+      - name: Create GitHub Release with release-it
+        run: bun run release --ci --no-git.requireCleanWorkingDir --no-increment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release Summary
+        run: |
+          echo "## 🎉 Release Created Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version.outputs.VERSION }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download the ZIP from the [release page](https://github.com/${{ github.repository }}/releases/tag/v${{ steps.version.outputs.VERSION }})" >> $GITHUB_STEP_SUMMARY
+          echo "2. Upload to [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)" >> $GITHUB_STEP_SUMMARY
+          echo "3. Upload to [Microsoft Edge Add-ons Dashboard](https://partner.microsoft.com/dashboard/microsoftedge/overview)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Compatibility" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Chrome 113+" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Edge 113+" >> $GITHUB_STEP_SUMMARY
+          echo "- ℹ️ Both browsers use the same ZIP file" >> $GITHUB_STEP_SUMMARY

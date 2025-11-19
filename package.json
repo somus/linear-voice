@@ -1,0 +1,47 @@
+{
+  "name": "wxt-react-starter",
+  "description": "manifest.json description",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "build:analyze": "wxt build --analyze",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "type-check": "tsc --noEmit",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare",
+    "check": "bunx ultracite check",
+    "fix": "bunx ultracite fix",
+    "generate:embeddings": "bun run scripts/generate-embeddings.ts",
+    "release": "release-it",
+    "release:patch": "release-it patch",
+    "release:minor": "release-it minor",
+    "release:major": "release-it major",
+    "release:dry": "release-it --dry-run"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.8.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.7",
+    "@release-it/conventional-changelog": "^10.0.2",
+    "@tailwindcss/vite": "^4.1.17",
+    "@types/chrome": "^0.1.31",
+    "@types/react": "^19.2.6",
+    "@types/react-dom": "^19.2.3",
+    "@wxt-dev/module-react": "^1.1.5",
+    "lefthook": "^2.0.4",
+    "release-it": "^19.0.6",
+    "tailwindcss": "^4.1.17",
+    "typescript": "^5.9.3",
+    "ultracite": "6.3.5",
+    "wxt": "^0.20.11"
+  }
+}
