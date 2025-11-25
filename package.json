@@ -1,6 +1,6 @@
 {
-  "name": "wxt-react-starter",
-  "description": "manifest.json description",
+  "name": "linear-voice",
+  "description": "LinearVoice is a Chrome extension that brings hands-free navigation to Linear using on-device AI",
   "private": true,
   "version": "1.0.0",
   "type": "module",
